@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -20,6 +21,7 @@ import java.util.List;
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
 
     private List<Movie> movies;
+    Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         // only needed because we need to set the background color
@@ -29,6 +31,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         TextView tvName;
         TextView tvRating;
         ImageView ivPoster;
+        LinearLayout rowView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -37,16 +40,18 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
             tvName = itemView.findViewById(R.id.tvTitle);
             tvRating = itemView.findViewById(R.id.tvRating);
             ivPoster = itemView.findViewById(R.id.ivPoster);
+            rowView = itemView.findViewById(R.id.rowView);
         }
     }
 
-    public MoviesAdapter(List<Movie> movies) {
+    public MoviesAdapter(Context context, List<Movie> movies) {
+        this.context = context;
         this.movies = movies;
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return movies.size();
     }
 
     @NonNull
@@ -64,7 +69,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(MoviesAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
 
         Movie movie = movies.get(position);
 
@@ -75,7 +80,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         double movieRating = movie.getRating();
 
         if (movieRating > 6) {
-            viewHolder.view.setBackgroundColor(Color.GREEN);
+            viewHolder.rowView.setBackgroundColor(Color.GREEN);
+        }
+        else {
+            viewHolder.rowView.setBackgroundColor(Color.WHITE);
         }
 
         String ratingText = String.format(resources.getString(R.string.rating), movieRating);
